@@ -50,7 +50,7 @@
      <Compile Include="Assets\Scripts\BinaryGame.cs" />
      <Compile Include="Assets\Scripts\NumBlock.cs" />
  <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>C:/Users/student/Documents/GitHub/test/WarioWare/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ <HintPath>Y:/GitHub/test/WarioWare/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
