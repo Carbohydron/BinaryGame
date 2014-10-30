@@ -16,31 +16,43 @@ public class BinaryBlockRow : MonoBehaviour
 		int goalnum = 1;
 		int currentVal = 0;
 		
+		
+
 		void Start ()
 		{	
-				rowtransform = gameObject.GetComponent<RectTransform> ();
+				GameObject bbr = Instantiate (Resources.Load ("BinaryBlockRow", typeof(GameObject))) as GameObject;
+				bbr.transform.parent = GameObject.Find ("Canvas").transform;	
+				rowtransform = bbr.GetComponent<RectTransform> ();
+				rowtransform.localScale = new Vector3 (1, 1, 1);
+				rowtransform.localPosition = new Vector3 (rowtransform.localPosition.x - 100, rowtransform.localPosition.y, rowtransform.localPosition.z);
+
+				
 				c = gameObject.GetComponentInParent<Canvas> ();
 				if (!hard) {
 						txt = Instantiate (Resources.Load ("txt", typeof(GameObject))) as GameObject;
 						txt.GetComponent<RectTransform> ().parent = c.transform;
 						txtrt = txt.GetComponent<RectTransform> ();
+						string temp = "rowtransform x : " + rowtransform.localPosition.x.ToString () + "rowtransform width : " + rowtransform.rect.width.ToString () + "txtrw width : " + txtrt.rect.width.ToString ();
+						Debug.Log (temp);
 						txtrt.localPosition = new Vector3 (rowtransform.localPosition.x + rowtransform.rect.width / 2 + txtrt.rect.width / 2 + 5, rowtransform.localPosition.y - 5, 0);
 						txtrt.localScale = new Vector3 (1, 1, 1);
-						
+			
 						rowtotal = txt.GetComponent<Text> ();
 				}
-				blockarr = gameObject.GetComponentsInChildren<NumBlock> ();
-				
 
+				blockarr = gameObject.GetComponentsInChildren<NumBlock> ();
+		
+		
 				goaltxt = Instantiate (Resources.Load ("txt", typeof(GameObject))) as GameObject;
 				goaltxt.GetComponent<RectTransform> ().parent = c.transform;
-				
+		
 				RectTransform goaltxtrt = goaltxt.GetComponent<RectTransform> ();
-			
+		
 				goaltxtrt.localPosition = new Vector3 (txtrt.localPosition.x + txtrt.rect.width + 5, txtrt.localPosition.y, 0);
 				goaltxtrt.localScale = new Vector3 (1, 1, 1);
 		}
 	
+
 		// Update is called once per frame
 		void Update ()
 		{
