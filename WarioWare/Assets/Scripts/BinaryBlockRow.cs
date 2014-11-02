@@ -10,17 +10,17 @@ public class BinaryBlockRow : MonoBehaviour
 		GameObject txt;
 		RectTransform txtrt;
 		private Text rowtotal;
-		public bool hard;
+		public bool difficult;
 		RectTransform rowtransform;
+		RectTransform goaltxtrt;
+		GameObject bbr;
 
 		int goalnum = 1;
 		int currentVal = 0;
 		
-		
-
 		void Start ()
 		{	
-				GameObject bbr = Instantiate (Resources.Load ("BinaryBlockRow", typeof(GameObject))) as GameObject;
+				bbr = Instantiate (Resources.Load ("BinaryBlockRow", typeof(GameObject))) as GameObject;
 				bbr.transform.parent = GameObject.Find ("Canvas").transform;	
 				rowtransform = bbr.GetComponent<RectTransform> ();
 				rowtransform.localScale = new Vector3 (1, 1, 1);
@@ -28,25 +28,25 @@ public class BinaryBlockRow : MonoBehaviour
 
 				
 				c = gameObject.GetComponentInParent<Canvas> ();
-				if (!hard) {
+				if (!difficult) {
 						txt = Instantiate (Resources.Load ("txt", typeof(GameObject))) as GameObject;
 						txt.GetComponent<RectTransform> ().parent = c.transform;
 						txtrt = txt.GetComponent<RectTransform> ();
-						string temp = "rowtransform x : " + rowtransform.localPosition.x.ToString () + "rowtransform width : " + rowtransform.rect.width.ToString () + "txtrw width : " + txtrt.rect.width.ToString ();
-						Debug.Log (temp);
+						//string temp = "rowtransform x : " + rowtransform.localPosition.x.ToString () + "rowtransform width : " + rowtransform.rect.width.ToString () + "txtrw width : " + txtrt.rect.width.ToString ();
+						//Debug.Log (temp);
 						txtrt.localPosition = new Vector3 (rowtransform.localPosition.x + rowtransform.rect.width / 2 + txtrt.rect.width / 2 + 5, rowtransform.localPosition.y - 5, 0);
 						txtrt.localScale = new Vector3 (1, 1, 1);
 			
 						rowtotal = txt.GetComponent<Text> ();
 				}
 
-				blockarr = gameObject.GetComponentsInChildren<NumBlock> ();
+				blockarr = bbr.GetComponentsInChildren<NumBlock> ();
 		
 		
 				goaltxt = Instantiate (Resources.Load ("txt", typeof(GameObject))) as GameObject;
 				goaltxt.GetComponent<RectTransform> ().parent = c.transform;
 		
-				RectTransform goaltxtrt = goaltxt.GetComponent<RectTransform> ();
+				goaltxtrt = goaltxt.GetComponent<RectTransform> ();
 		
 				goaltxtrt.localPosition = new Vector3 (txtrt.localPosition.x + txtrt.rect.width + 5, txtrt.localPosition.y, 0);
 				goaltxtrt.localScale = new Vector3 (1, 1, 1);
@@ -56,7 +56,6 @@ public class BinaryBlockRow : MonoBehaviour
 		// Update is called once per frame
 		void Update ()
 		{
-
 				Text goaltxttemp = goaltxt.GetComponent<Text> ();
 				goaltxttemp.text = goalnum.ToString ();
 			
@@ -66,16 +65,45 @@ public class BinaryBlockRow : MonoBehaviour
 								currentVal += (int)System.Math.Pow (2, a);
 						}
 				}
-				if (!hard) {
+
+				if (!difficult) {
+						rowtotal.enabled = true;
 						rowtotal.fontStyle = FontStyle.Normal;
 						rowtotal.text = currentVal.ToString ();
+				} else {
+						rowtotal.enabled = false;
 				}
 			
 		}
-
-		private void rowSolved ()
+		public void rowSolved ()
 		{
-			
+				for (int a =0; a<8; ++a) {
+						blockarr [a].GetComponent<Image> ().color = new Color (0f, 255f, 45f);
+				}
+				Invoke ("delete", 2f);
+		}
+		private void delete ()
+		{
+				Destroy (txt);
+				Destroy (goaltxt);
+				Destroy (bbr);
+				Destroy (this);
+		}
+
+		public void updatePos (Vector3 newpos)
+		{
+				if (rowtransform != null)
+						rowtransform.localPosition = newpos;
+				if (txtrt != null)		
+						txtrt.localPosition = new Vector3 (rowtransform.localPosition.x + rowtransform.rect.width / 2 + txtrt.rect.width / 2 + 5, rowtransform.localPosition.y - 5, 0);
+				if (goaltxtrt != null)		
+						goaltxtrt.localPosition = new Vector3 (txtrt.localPosition.x + txtrt.rect.width + 5, txtrt.localPosition.y, 0);
+		}
+
+		public void updateDifficulty (bool d)
+		{
+				difficult = d;
+
 		}
 
 		public int Goalnum {
@@ -91,6 +119,26 @@ public class BinaryBlockRow : MonoBehaviour
 		public int CurrentVal {
 				get {
 						return currentVal;
+				}
+		}
+
+		
+
+		public RectTransform Rowtransform {
+				get {
+						return rowtransform;
+				}
+		}
+
+		public RectTransform Goaltxtrt {
+				get {
+						return goaltxtrt;
+				}
+		}
+
+		public RectTransform Txtrt {
+				get {
+						return txtrt;
 				}
 		}
 }
