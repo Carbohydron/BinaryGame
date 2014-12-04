@@ -15,9 +15,9 @@ public class BinaryBlockRow : MonoBehaviour
 		RectTransform goaltxtrt;
 		GameObject bbr;
 
-		int goalnum = 1;
-		int currentVal = 0;
 		
+		int currentVal = 0;
+		int goalnum;
 		void Start ()
 		{	
 				bbr = Instantiate (Resources.Load ("BinaryBlockRow", typeof(GameObject))) as GameObject;
@@ -50,6 +50,10 @@ public class BinaryBlockRow : MonoBehaviour
 		
 				goaltxtrt.localPosition = new Vector3 (txtrt.localPosition.x + txtrt.rect.width + 5, txtrt.localPosition.y, 0);
 				goaltxtrt.localScale = new Vector3 (1, 1, 1);
+
+				goalnum = Random.Range (1, 255);
+
+
 		}
 	
 
@@ -75,12 +79,12 @@ public class BinaryBlockRow : MonoBehaviour
 				}
 			
 		}
-		public void rowSolved ()
+		public void rowSolved (float t)
 		{
 				for (int a =0; a<8; ++a) {
 						blockarr [a].GetComponent<Image> ().color = new Color (0f, 255f, 45f);
 				}
-				Invoke ("delete", 2f);
+				Invoke ("delete", t);
 		}
 		private void delete ()
 		{

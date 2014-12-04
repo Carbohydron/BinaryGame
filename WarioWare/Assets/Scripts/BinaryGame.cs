@@ -6,6 +6,16 @@ public class BinaryGame : MonoBehaviour
 {
 		public bool difficult = false;
 		BinaryBlockRow[] blockrows = new BinaryBlockRow[5];
+
+		bool init = false;
+		public GameObject score;
+		public GameObject time;
+		Text scoretxt;
+		Text timetxt;
+		float scorenum = 0;
+		float timenum = 100;
+		
+		
 		
 		void Start ()
 		{
@@ -15,18 +25,35 @@ public class BinaryGame : MonoBehaviour
 						blockrows.SetValue (temp, a);
 				}
 
-				for (int a =0; a< blockrows.Length; ++a) {
-						if (blockrows [a] != null) {
-								Vector3 tempv = new Vector3 (-100, -220 + a * 100, 0);
-								blockrows [a].updatePos (tempv);
-						}
-				}
+				scoretxt = score.GetComponent<Text> ();
+				timetxt = time.GetComponent<Text> ();
+				
+				
 
+		}
+		void FixedUpdate ()
+		{
+				
 		}
 	
 		// Update is called once per frame
 		void Update ()
 		{
+				timenum -= Time.deltaTime;
+				if (!init) {
+						init = true;
+						for (int a =0; a< blockrows.Length; ++a) {
+								if (blockrows [a] != null) {
+										Vector3 tempv = new Vector3 (-100, -220 + a * 100, 0);
+										blockrows [a].updatePos (tempv);
+								}
+						}
+				}
+			
+				scoretxt.text = scorenum.ToString ("0000");
+				timetxt.text = timenum.ToString ("00");
+
+
 				for (int a =0; a<blockrows.Length; ++a) {
 						if (blockrows [a] != null) {
 								Vector3 temp = new Vector3 (-100, -220 + a * 100, 0);
@@ -34,7 +61,7 @@ public class BinaryGame : MonoBehaviour
 
 								blockrows [a].Rowtransform.localPosition = Vector3.Lerp (blockrows [a].Rowtransform.localPosition, temp, Time.deltaTime);
 								blockrows [a].Txtrt.localPosition = Vector3.Lerp (blockrows [a].Txtrt.localPosition, new Vector3 (temp.x + blockrows [a].Rowtransform.rect.width / 2 + blockrows [a].Txtrt.rect.width / 2 + 5, temp.y - 5, 0), Time.deltaTime);
-								blockrows [a].Goaltxtrt.localPosition = Vector3.Lerp (blockrows [a].Goaltxtrt.localPosition, new Vector3 (blockrows [a].Txtrt.localPosition.x + blockrows [a].Txtrt.rect.width + 5, blockrows [a].Txtrt.localPosition.y, 0), Time.deltaTime);
+								blockrows [a].Goaltxtrt.localPosition = Vector3.Lerp (blockrows [a].Goaltxtrt.localPosition, new Vector3 (blockrows [a].Txtrt.localPosition.x + blockrows [a].Txtrt.rect.width + 5, temp.y, 0), Time.deltaTime);
 								blockrows [a].updateDifficulty (difficult);
 						}
 				}
@@ -51,11 +78,12 @@ public class BinaryGame : MonoBehaviour
 
 		private void rowSolved (int a)
 		{
+				float time = 1f;
 				if (blockrows [a] != null)
-						blockrows [a].rowSolved ();
+						blockrows [a].rowSolved (time);
 				blockrows [a] = null;
-				Invoke ("shiftRows", 2f);		
-
+				Invoke ("shiftRows", time);
+				scorenum += timenum;
 
 		}
 
